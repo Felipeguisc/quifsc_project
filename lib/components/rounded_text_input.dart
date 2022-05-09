@@ -33,7 +33,12 @@ class RoundedTextInput extends StatelessWidget {
 }
 
 class RoundedPasswordInput extends StatelessWidget {
-  const RoundedPasswordInput({Key? key}) : super(key: key);
+  final ValueChanged<String> onChanged;
+
+  const RoundedPasswordInput({
+    Key? key,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

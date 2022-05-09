@@ -1,9 +1,12 @@
 import 'dart:ui';
 
+import 'package:login_project/components/rounded_button.dart';
 import 'package:login_project/components/rounded_text_input.dart';
-import 'package:login_project/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
+import '../../components/already_have_an_account_check.dart';
+import '../signup/signup.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -29,13 +32,38 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Login"),
+            Text(
+              "LOGIN",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: size.height * 0.04,
+            ),
             SvgPicture.asset(
               "assets/icons/login.svg",
               height: size.height * 0.35,
             ),
-            RoundedTextInput(hintText: "Seu e-mail", onChanged: (value) {},),
-            RoundedPasswordInput(),
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            RoundedTextInput(
+              hintText: "Seu e-mail",
+              onChanged: (value) {},
+            ),
+            RoundedPasswordInput(
+              onChanged: (value) {},
+            ),
+            RoundedButton(text: "ENTRAR", onPress: () {}),
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            AlreadyHaveAnAccountCheck(
+              onPress: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return SignUpScreen();
+                }));
+              },
+            ),
           ],
         ),
       ),

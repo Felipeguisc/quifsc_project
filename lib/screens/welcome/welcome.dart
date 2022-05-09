@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:login_project/components/rounded_button.dart';
@@ -6,6 +5,7 @@ import 'package:login_project/constants.dart';
 import 'package:login_project/screens/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:login_project/screens/signup/signup.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -50,8 +50,12 @@ class Body extends StatelessWidget {
                 }));
               }),
           RoundedButton(
-            text: "Login",
-            onPress: () {},
+            text: "Criar Conta",
+            onPress: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return SignUpScreen();
+              }));
+            },
             color: kPrimaryLightColor,
             textColor: Colors.black,
           ),
