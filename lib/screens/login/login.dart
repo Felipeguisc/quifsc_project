@@ -1,11 +1,11 @@
-import 'dart:ui';
-
 import 'package:login_project/components/rounded_button.dart';
 import 'package:login_project/components/rounded_text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:login_project/services/auth.dart';
 
 import '../../components/already_have_an_account_check.dart';
+import '../home/home.dart';
 import '../signup/signup.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -13,26 +13,32 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Body(),
     );
   }
 }
 
 class Body extends StatelessWidget {
-  const Body({
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _psswdController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  Body({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AuthService auth = AuthService();
     Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               "LOGIN",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -48,19 +54,51 @@ class Body extends StatelessWidget {
             ),
             RoundedTextInput(
               hintText: "Seu e-mail",
-              onChanged: (value) {},
+              controller: _emailController,
             ),
             RoundedPasswordInput(
-              onChanged: (value) {},
+              controller: _psswdController,
             ),
-            RoundedButton(text: "ENTRAR", onPress: () {}),
+            RoundedButton(
+              text: "ENTRAR",
+              onPress: () {
+                auth
+                    .signInEmailAndPass(
+                        _emailController.text, _psswdController.text)
+                    .then((value) {
+                  if (value != null) {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const Home();
+                    }));
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: const Text('Falha no Login'),
+                          content: const Text('Usuário ou senha inválidos!'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                      barrierDismissible: true,
+                    );
+                  }
+                });
+              },
+            ),
             SizedBox(
               height: size.height * 0.03,
             ),
             AlreadyHaveAnAccountCheck(
               onPress: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return SignUpScreen();
+                  return const SignUpScreen();
                 }));
               },
             ),
@@ -82,7 +120,7 @@ class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: size.height,
       child: Stack(

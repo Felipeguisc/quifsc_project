@@ -7,6 +7,7 @@ import 'package:login_project/constants.dart';
 import 'package:login_project/screens/login/login.dart';
 
 import '../../components/or_divider.dart';
+import '../../services/auth.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -20,12 +21,16 @@ class SignUpScreen extends StatelessWidget {
 }
 
 class Body extends StatelessWidget {
-  const Body({
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _psswdController = TextEditingController();
+
+  Body({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AuthService auth = AuthService();
     Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
@@ -47,11 +52,19 @@ class Body extends StatelessWidget {
               height: size.height * 0.03,
             ),
             RoundedTextInput(
-                hintText: "Seu melhor e-mail", onChanged: (value) {}),
-            RoundedPasswordInput(
-              onChanged: (value) {},
+              controller: _emailController,
+              hintText: "Seu melhor e-mail",
             ),
-            RoundedButton(text: "CRIAR CONTA", onPress: () {}),
+            RoundedPasswordInput(
+              controller: _psswdController,
+            ),
+            RoundedButton(
+              text: "CRIAR CONTA",
+              onPress: () {
+                auth.signUpWithEmailAndPassword(
+                    'sarinhaproplayer@gmail.com', '123456');
+              },
+            ),
             SizedBox(
               height: size.height * 0.035,
             ),
@@ -68,13 +81,16 @@ class Body extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SocialButton(
-                  srcIcon: "assets/icons/facebook.svg", onPress: (){},
+                  srcIcon: "assets/icons/facebook.svg",
+                  onPress: () {},
                 ),
                 SocialButton(
-                  srcIcon: "assets/icons/twitter.svg", onPress: (){},
+                  srcIcon: "assets/icons/twitter.svg",
+                  onPress: () {},
                 ),
                 SocialButton(
-                  srcIcon: "assets/icons/google-plus.svg", onPress: (){},
+                  srcIcon: "assets/icons/google-plus.svg",
+                  onPress: () {},
                 ),
               ],
             )
@@ -130,7 +146,7 @@ class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       height: size.height,
       width: double.infinity,
       child: Stack(
