@@ -2,14 +2,15 @@ import 'package:login_project/components/rounded_button.dart';
 import 'package:login_project/components/rounded_text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:login_project/screens/home/home.dart';
 import 'package:login_project/services/auth.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/already_have_an_account_check.dart';
-import '../home/home.dart';
 import '../signup/signup.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,19 +20,22 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class Body extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _psswdController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
+class Body extends StatefulWidget {
 
   Body({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _psswdController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    AuthService auth = AuthService();
     Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
@@ -62,34 +66,7 @@ class Body extends StatelessWidget {
             RoundedButton(
               text: "ENTRAR",
               onPress: () {
-                auth
-                    .signInEmailAndPass(
-                        _emailController.text, _psswdController.text)
-                    .then((value) {
-                  if (value != null) {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const Home();
-                    }));
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (_) {
-                        return AlertDialog(
-                          title: const Text('Falha no Login'),
-                          content: const Text('Usuário ou senha inválidos!'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'OK'),
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        );
-                      },
-                      barrierDismissible: true,
-                    );
-                  }
-                });
+                login();
               },
             ),
             SizedBox(
@@ -98,7 +75,7 @@ class Body extends StatelessWidget {
             AlreadyHaveAnAccountCheck(
               onPress: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const SignUpScreen();
+                  return const SignUpPage();
                 }));
               },
             ),
@@ -106,6 +83,33 @@ class Body extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  login() async{
+    try{
+      await context.read<AuthService>().signInEmailAndPass(_emailController.text, _psswdController.text);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return const HomePage();
+      }));
+    } on AuthException catch(e){
+      //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: const Text('Falha no Login'),
+            content: Text(e.message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+        barrierDismissible: true,
+      );
+    }
   }
 }
 

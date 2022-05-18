@@ -1,46 +1,70 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../models/user.dart';
-
-class AuthService {
+class AuthService extends ChangeNotifier{
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? user;
+  bool isLoading = true;
 
-  AppUser? _userFromFirebase(User? user) {
-    return user != null ? AppUser(user.uid) : null;
+  AuthService(){
+    _authCheck();
   }
 
-  Future signInEmailAndPass(String email, String password) async {
+  _authCheck(){
+    _auth.authStateChanges().listen((User? user){
+      user = (user == null) ? null : user;
+      isLoading = false;
+      notifyListeners();
+    });
+  }
+
+  signInEmailAndPass(String email, String password) async {
     print('Iniciando login do usuário...');
     try {
-      UserCredential authResult = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      User? firebaseUser = authResult.user;
-      return _userFromFirebase(firebaseUser);
-    } catch (e) {
-      print(e.toString());
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      _getUser();
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      if (e.code == 'user-not-found') {
+        throw AuthException('Olha, não encontramos nenhuma conta com esse e-mail cadastrado! \n\nCaso não tenha uma conta clique no botão Criar Conta');
+      } else if (e.code == 'wrong-password') {
+        throw AuthException('Ops, parece que sua senha está incorreta!');
+      }
     }
   }
 
-  Future signUpWithEmailAndPassword(String email, String password) async {
+  signUpWithEmailAndPassword(String email, String password) async {
     print('Iniciando criação de usuário...');
     try {
-      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      User? firebaseUser = authResult.user;
-      return _userFromFirebase(firebaseUser);
-    } catch (e) {
-      print(e.toString());
+      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      _getUser();
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      if (e.code == 'email-already-in-use') {
+        throw AuthException('Este e-mail já está cadastrado');
+      } else if (e.code == 'weak-password') {
+        throw AuthException('A senha é muito fraca!');
+      }
     }
   }
 
-  Future signOut() async {
+  signOut() async {
     try {
-      return await _auth.signOut();
+      await _auth.signOut();
+      _getUser();
     } catch (e) {
       print(e.toString());
-      return null;
     }
   }
 
+  _getUser(){
+    user = _auth.currentUser;
+    notifyListeners();
+  }
+}
 
+class AuthException implements Exception {
+  String message;
+
+  AuthException(this.message);
 }

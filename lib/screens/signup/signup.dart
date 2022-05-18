@@ -5,12 +5,13 @@ import 'package:login_project/components/rounded_button.dart';
 import 'package:login_project/components/rounded_text_input.dart';
 import 'package:login_project/constants.dart';
 import 'package:login_project/screens/login/login.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/or_divider.dart';
 import '../../services/auth.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +21,22 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
-class Body extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _psswdController = TextEditingController();
+class Body extends StatefulWidget {
 
   Body({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _psswdController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    AuthService auth = AuthService();
     Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
@@ -61,8 +67,7 @@ class Body extends StatelessWidget {
             RoundedButton(
               text: "CRIAR CONTA",
               onPress: () {
-                auth.signUpWithEmailAndPassword(
-                    'sarinhaproplayer@gmail.com', '123456');
+                register();
               },
             ),
             SizedBox(
@@ -71,7 +76,7 @@ class Body extends StatelessWidget {
             AlreadyHaveAnAccountCheck(
               onPress: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return LoginScreen();
+                  return LoginPage();
                 }));
               },
               login: false,
@@ -98,6 +103,30 @@ class Body extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  register() async{
+    try{
+      await context.read<AuthService>().signUpWithEmailAndPassword('sarinhaproplayer@gmail.com', '123456');
+    } on AuthException catch(e){
+      //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: const Text('Falha ao cadastrar usuário'),
+            content: Text(e.message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+        barrierDismissible: true,
+      );
+    }
   }
 }
 

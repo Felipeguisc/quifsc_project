@@ -1,13 +1,22 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:login_project/screens/welcome/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:login_project/services/auth.dart';
+import 'package:login_project/widgets/auth_check.dart';
+import 'package:provider/provider.dart';
 
 import 'constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthService()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,9 +30,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Auth',
       theme: ThemeData(
         primaryColor: kPrimaryColor,
-
+        appBarTheme: AppBarTheme(
+          color: kPrimaryColor,
+        ),
       ),
-      home: const WelcomeScreen(),
+      home: const AuthCheck(),
     );
   }
 }

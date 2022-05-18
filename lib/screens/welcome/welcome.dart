@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:login_project/screens/signup/signup.dart';
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+class WelcomePage extends StatelessWidget {
+  const WelcomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +44,14 @@ class Body extends StatelessWidget {
               text: "Login",
               onPress: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return LoginScreen();
+                  return LoginPage();
                 }));
               }),
           RoundedButton(
             text: "Criar Conta",
             onPress: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return SignUpScreen();
+                return SignUpPage();
               }));
             },
             color: kPrimaryLightColor,

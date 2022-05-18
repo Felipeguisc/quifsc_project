@@ -68,7 +68,7 @@ class _RoundedPasswordInputState extends State<RoundedPasswordInput> {
 
   GestureDetector _iconEyes() {
     var icon =
-    widget.obscure ?  Icons.remove_red_eye_rounded : Icons.remove_red_eye_outlined;
+    widget.obscure ?  Icons.visibility : Icons.visibility_off;
     return GestureDetector(
       onTap: () {
         setState(() {
