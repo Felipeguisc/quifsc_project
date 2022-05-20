@@ -29,6 +29,8 @@ class AuthService extends ChangeNotifier{
         throw AuthException('Olha, não encontramos nenhuma conta com esse e-mail cadastrado! \n\nCaso não tenha uma conta clique no botão Criar Conta');
       } else if (e.code == 'wrong-password') {
         throw AuthException('Ops, parece que sua senha está incorreta!');
+      } else {
+        throw AuthException('Ops! Parece que ocorreu algum problema no seu login, tente novamente');
       }
     }
   }
@@ -44,6 +46,10 @@ class AuthService extends ChangeNotifier{
         throw AuthException('Este e-mail já está cadastrado');
       } else if (e.code == 'weak-password') {
         throw AuthException('A senha é muito fraca!');
+      } else if (e.code == 'invalid-email') {
+        throw AuthException('Parece que o e-mail informado não é valido!');
+      } else {
+        throw AuthException('Ops! Parece que ocorreu algum problema no cadastro, tente novamente');
       }
     }
   }

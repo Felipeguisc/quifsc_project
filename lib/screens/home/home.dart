@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:login_project/constants.dart';
+import 'package:login_project/screens/question/question.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth.dart';
+import '../quiz/quiz.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -29,12 +31,20 @@ class HomePage extends StatelessWidget {
             _FeatureItem(
               'Criar Quiz',
               Icons.quiz,
-              onTap: () { },
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return MyHomePage(title: 'Teste',);
+                }));
+              },
             ),
             _FeatureItem(
               'Cadastrar Perguntas',
               Icons.question_answer_rounded,
-              onTap: () { },
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const QuestionPage();
+                }));
+              },
             ),
             _FeatureItem(
               'Configurações',

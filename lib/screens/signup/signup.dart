@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/or_divider.dart';
 import '../../services/auth.dart';
+import '../home/home.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -107,7 +108,10 @@ class _BodyState extends State<Body> {
 
   register() async{
     try{
-      await context.read<AuthService>().signUpWithEmailAndPassword('sarinhaproplayer@gmail.com', '123456');
+      await context.read<AuthService>().signUpWithEmailAndPassword(_emailController.text, _psswdController.text);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return const HomePage();
+      }));
     } on AuthException catch(e){
       //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
       showDialog(
