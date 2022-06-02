@@ -1,4 +1,4 @@
-# login_project
+# QUIFSC
 
 Flutter project of a welcome and login screen.
 
