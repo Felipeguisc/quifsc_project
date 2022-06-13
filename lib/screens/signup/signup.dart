@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:login_project/components/already_have_an_account_check.dart';
-import 'package:login_project/components/rounded_button.dart';
-import 'package:login_project/components/rounded_text_input.dart';
+import 'package:login_project/widgets/already_have_an_account_check.dart';
+import 'package:login_project/widgets/rounded_button.dart';
+import 'package:login_project/widgets/rounded_text_input.dart';
 import 'package:login_project/constants.dart';
 import 'package:login_project/screens/login/login.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/or_divider.dart';
+import '../../widgets/or_divider.dart';
 import '../../services/auth.dart';
 import '../home/home.dart';
 
@@ -35,6 +35,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _psswdController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +58,10 @@ class _BodyState extends State<Body> {
             ),
             SizedBox(
               height: size.height * 0.03,
+            ),
+            RoundedTextInput(
+              controller: _nameController,
+              hintText: "Seu nome/apelido",
             ),
             RoundedTextInput(
               controller: _emailController,
@@ -108,7 +113,7 @@ class _BodyState extends State<Body> {
 
   register() async{
     try{
-      await context.read<AuthService>().signUpWithEmailAndPassword(_emailController.text, _psswdController.text);
+      await context.read<AuthService>().signUpWithEmailAndPassword(_emailController.text, _psswdController.text, _nameController.text);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return const HomePage();
       }));

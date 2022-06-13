@@ -1,12 +1,12 @@
-import 'package:login_project/components/rounded_button.dart';
-import 'package:login_project/components/rounded_text_input.dart';
+import 'package:login_project/widgets/rounded_button.dart';
+import 'package:login_project/widgets/rounded_text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:login_project/screens/home/home.dart';
 import 'package:login_project/services/auth.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/already_have_an_account_check.dart';
+import '../../widgets/already_have_an_account_check.dart';
 import '../signup/signup.dart';
 
 class LoginPage extends StatelessWidget {

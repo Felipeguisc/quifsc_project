@@ -1,4 +1,4 @@
-import 'package:login_project/components/rounded_button.dart';
+import 'package:login_project/widgets/rounded_button.dart';
 import 'package:login_project/constants.dart';
 import 'package:login_project/screens/login/login.dart';
 import 'package:flutter/material.dart';

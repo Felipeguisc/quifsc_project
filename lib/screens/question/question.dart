@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_project/components/rounded_button.dart';
+import 'package:login_project/widgets/rounded_button.dart';
 import 'package:login_project/screens/question/options.dart';
 
 import '../../constants.dart';

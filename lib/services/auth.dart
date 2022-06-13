@@ -11,6 +11,7 @@ class AuthService extends ChangeNotifier{
   }
 
   _authCheck(){
+    _getUser();
     _auth.authStateChanges().listen((User? user){
       user = (user == null) ? null : user;
       isLoading = false;
@@ -35,10 +36,11 @@ class AuthService extends ChangeNotifier{
     }
   }
 
-  signUpWithEmailAndPassword(String email, String password) async {
+  signUpWithEmailAndPassword(String email, String password, displayName) async {
     print('Iniciando criação de usuário...');
     try {
       await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      await _auth.currentUser!.updateDisplayName(displayName);
       _getUser();
     } on FirebaseAuthException catch (e) {
       print(e.code);

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:login_project/constants.dart';
 import 'package:login_project/screens/question/question.dart';
+import 'package:login_project/screens/quiz/quiz_home.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth.dart';
-import '../quiz/quiz.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,18 +22,31 @@ class HomePage extends StatelessWidget {
               height: size.height * 0.15,
               decoration: const BoxDecoration(
                 color: kPrimaryLightColor,
-                borderRadius:
-                BorderRadius.only(bottomLeft: Radius.elliptical(400,40), bottomRight: Radius.elliptical(400,200)),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.elliptical(400, 40),
+                    bottomRight: Radius.elliptical(400, 200)),
               ),
-              child: Center(child: Text('QUIFSC')),
+              child: Center(
+                child: Text(
+                  "Bem Vindo(a) " +
+                      (context.read<AuthService>().user?.displayName ??
+                          "Player"),
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             _FeatureItem(
               'Criar Quiz',
               Icons.quiz,
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return MyHomePage(title: 'Teste',);
+                  return QuizHomePage();
                 }));
               },
             ),
@@ -49,12 +62,14 @@ class HomePage extends StatelessWidget {
             _FeatureItem(
               'Configurações',
               Icons.app_settings_alt_rounded,
-              onTap: () { },
+              onTap: () {},
             ),
             _FeatureItem(
-              context.read<AuthService>().user?.email ?? '',
-              Icons.app_settings_alt_rounded,
-              onTap: () { },
+              "Sair",
+              Icons.power_settings_new,
+              onTap: () async {
+                await context.read<AuthService>().signOut();
+              },
             ),
           ],
         ),
@@ -89,11 +104,14 @@ class _FeatureItem extends StatelessWidget {
                 Icon(
                   icon,
                   color: Colors.white,
-                  size: 24,
+                  size: 50,
                 ),
                 Text(
                   label,
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600),
                 ),
               ],
             ),
