@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Option extends StatefulWidget {
@@ -55,13 +52,4 @@ class _OptionState extends State<Option> {
   }
 
   void onTap() {}
-}
-
-
-class QuizState extends ChangeNotifier {
-
-  String? quizId;
-  StreamSubscription<QuerySnapshot>? _questionSubscription;
-
-
 }

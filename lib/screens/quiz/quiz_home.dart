@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login_project/screens/quiz/quiz.dart';
+import 'package:login_project/screens/quiz/quiz_state.dart';
 import 'package:provider/provider.dart';
-
-import 'option.dart';
 
 class QuizHomePage extends StatelessWidget {
   const QuizHomePage({Key? key}) : super(key: key);

@@ -11,7 +11,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -19,12 +18,12 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: size.height * 0.15,
+              height: 150,
               decoration: const BoxDecoration(
                 color: kPrimaryLightColor,
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.elliptical(400, 40),
-                    bottomRight: Radius.elliptical(400, 200)),
+                    bottomRight: Radius.elliptical(400, 40)),
               ),
               child: Center(
                 child: Text(
@@ -40,6 +39,15 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(
               height: 20,
+            ),
+            _FeatureItem(
+              'Quiz',
+              Icons.quiz,
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return QuizHomePage();
+                }));
+              },
             ),
             _FeatureItem(
               'Criar Quiz',
